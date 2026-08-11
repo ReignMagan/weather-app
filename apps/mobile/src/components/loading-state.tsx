@@ -35,12 +35,19 @@ const styles = StyleSheet.create({
   card: {
     alignItems: 'center',
     padding: spacing.xl,
+    borderWidth: 3,
+    borderColor: colors.border,
     borderRadius: radius.xl,
     backgroundColor: colors.surface,
+    shadowColor: colors.shadow,
+    shadowOffset: { width: 6, height: 6 },
+    shadowOpacity: 1,
+    shadowRadius: 0,
   },
 
   title: {
     marginTop: spacing.lg,
+    fontFamily: 'monospace',
     fontSize: typography.size.lg,
     fontWeight: typography.weight.semibold,
     color: colors.textPrimary,
@@ -48,6 +55,7 @@ const styles = StyleSheet.create({
 
   message: {
     marginTop: spacing.sm,
+    fontFamily: 'monospace',
     fontSize: typography.size.md,
     textAlign: 'center',
     color: colors.textSecondary,

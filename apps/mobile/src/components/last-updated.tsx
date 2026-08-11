@@ -20,14 +20,17 @@ export function LastUpdated({
 }: LastUpdatedProps) {
   return (
     <Text style={styles.text}>
-      Last updated {formatUpdatedTime(generatedAt)}
+      LAST UPDATED: {formatUpdatedTime(generatedAt)}
     </Text>
   );
 }
 
 const styles = StyleSheet.create({
   text: {
+    fontFamily: 'monospace',
     fontSize: typography.size.xs,
+    fontWeight: typography.weight.bold,
+    letterSpacing: 1,
     color: colors.textSecondary,
   },
 });

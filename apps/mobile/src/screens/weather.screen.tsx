@@ -174,9 +174,10 @@ const styles = StyleSheet.create({
   },
 
   content: {
-    padding: spacing.xl,
+    paddingHorizontal: spacing.lg,
+    paddingTop: spacing.lg,
     paddingBottom: spacing.xxxl,
-    gap: spacing.xl,
+    gap: spacing.lg,
   },
 
   message: {

@@ -1,180 +1,19 @@
 import { StyleSheet, Text, View } from 'react-native';
-
-import { colors, radius, spacing, typography } from '../theme';
-
 import type { WeatherCondition } from '../types/weather';
-import { getWeatherIcon } from '../utils/weather-icon';
+import { PixelIcon } from './pixel-icon';
+import { colors, spacing, typography } from '../theme';
 
-type DailyForecastItem = {
-  date: string;
-  temperatureMax: number;
-  temperatureMin: number;
-  condition: WeatherCondition;
-  conditionLabel: string;
-  precipitationProbabilityMax: number;
-};
+type Item = { date: string; temperatureMax: number; temperatureMin: number; condition: WeatherCondition; conditionLabel: string; precipitationProbabilityMax: number };
+type Props = { items: Item[]; temperatureUnit: string; timezone: string };
 
-type DailyForecastProps = {
-  items: DailyForecastItem[];
-  temperatureUnit: string;
-  timezone: string;
-};
-
-function formatDay(date: string, index: number, timezone: string) {
-  if (index === 0) {
-    return 'Today';
-  }
-
-  const parsedDate = new Date(`${date}T12:00:00`);
-
-  return parsedDate.toLocaleDateString([], {
-    weekday: 'short',
-    timeZone: timezone,
-  });
+export function DailyForecast({ items, temperatureUnit, timezone }: Props) {
+  return <View style={styles.list}>{items.map((item, index) => <View key={item.date} style={[styles.row, index === 0 && styles.selected]}><Text style={[styles.day, index === 0 && styles.inverse]}>{formatDay(item.date, index, timezone).toUpperCase()}</Text><PixelIcon name={item.condition === 'clear' ? 'cloudSun' : 'cloud'} size={28} color={index === 0 ? colors.sunshine : colors.primary} /><View style={styles.condition}><Text numberOfLines={1} style={[styles.conditionText, index === 0 && styles.inverse]}>{item.conditionLabel.toUpperCase()}</Text><Text style={[styles.rain, index === 0 && styles.inverse]}>{item.precipitationProbabilityMax}% RAIN</Text></View><Text style={[styles.temps, index === 0 && styles.inverse]}>{Math.round(item.temperatureMax)} / {Math.round(item.temperatureMin)}{temperatureUnit}</Text><PixelIcon name="chevronRight" size={20} color={index === 0 ? colors.textInverse : colors.textPrimary} /></View>)}</View>;
 }
-
-export function DailyForecast({
-  items,
-  temperatureUnit,
-  timezone,
-}: DailyForecastProps) {
-  return (
-    <View style={styles.section}>
-
-      <View style={styles.list}>
-        {items.map((item, index) => (
-          <View
-            key={item.date}
-            style={[
-                styles.row,
-                index === 0 && styles.todayRow,
-            ]}
-            >
-            <Text
-                style={[
-                    styles.day,
-                    index === 0 && styles.todayDay,
-                ]}
-                >
-                {formatDay(item.date, index, timezone)}
-            </Text>
-
-            <Text style={styles.icon}>
-            {getWeatherIcon(item.condition)}
-            </Text>
-
-            <View style={styles.conditionContainer}>
-              <Text style={styles.condition}>
-                {item.conditionLabel}
-              </Text>
-
-              <Text style={styles.precipitation}>
-                {item.precipitationProbabilityMax}% rain
-              </Text>
-            </View>
-
-            <View style={styles.temperatureContainer}>
-                <Text style={styles.high}>
-                    {Math.round(item.temperatureMax)}°
-                    {temperatureUnit}
-                </Text>
-
-                <Text style={styles.separator}>/</Text>
-
-                <Text style={styles.low}>
-                    {Math.round(item.temperatureMin)}°
-                    {temperatureUnit}
-                </Text>
-            </View>
-          </View>
-        ))}
-      </View>
-    </View>
-  );
-}
-
+function formatDay(date: string, index: number, timezone: string) { if (index === 0) return 'Today'; return new Date(`${date}T12:00:00`).toLocaleDateString([], { weekday: 'short', timeZone: timezone }); }
 const styles = StyleSheet.create({
-  section: {
-    gap: spacing.md,
-  },
-
-  title: {
-    fontSize: typography.size.lg,
-    fontWeight: typography.weight.semibold,
-    color: colors.textPrimary,
-  },
-
-  list: {
-    borderRadius: radius.lg,
-    backgroundColor: colors.surface,
-    overflow: 'hidden',
-  },
-
-  row: {
-    minHeight: 72,
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: spacing.lg,
-    paddingVertical: spacing.md,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.border,
-    gap: spacing.md,
-  },
-
-  day: {
-    width: 56,
-    fontSize: typography.size.md,
-    fontWeight: typography.weight.semibold,
-    color: colors.textPrimary,
-  },
-
-  conditionContainer: {
-    flex: 1,
-  },
-
-  icon: {
-    fontSize: 24,
-  },
-
-  condition: {
-    fontSize: typography.size.sm,
-    color: colors.textPrimary,
-  },
-
-  precipitation: {
-    marginTop: spacing.xs,
-    fontSize: typography.size.xs,
-    color: colors.primary,
-  },
-
-  temperatureContainer: {
-    flexDirection: 'row',
-    gap: spacing.sm,
-  },
-
-  high: {
-    fontSize: typography.size.md,
-    fontWeight: typography.weight.semibold,
-    color: colors.textPrimary,
-  },
-
-  low: {
-    fontSize: typography.size.md,
-    color: colors.textSecondary,
-  },
-
-  todayRow: {
-    backgroundColor: colors.primarySoft,
-  },
-
-  todayDay: {
-    color: colors.primary,
-    },
-    
-    
-  separator: {
-    fontSize: typography.size.md,
-    color: colors.textSecondary,
-    },
-
+  list: { borderWidth: 3, borderColor: colors.border, backgroundColor: colors.surface, shadowColor: colors.shadow, shadowOffset: { width: 5, height: 5 }, shadowOpacity: 1, shadowRadius: 0 },
+  row: { minHeight: 68, flexDirection: 'row', alignItems: 'center', gap: spacing.sm, paddingHorizontal: spacing.md, borderBottomWidth: 2, borderBottomColor: colors.border }, selected: { backgroundColor: colors.primary },
+  day: { width: 48, fontFamily: 'monospace', fontSize: typography.size.sm, fontWeight: typography.weight.bold, color: colors.textPrimary }, condition: { flex: 1 },
+  conditionText: { fontFamily: 'monospace', fontSize: typography.size.xs, fontWeight: typography.weight.bold, color: colors.textPrimary }, rain: { marginTop: 2, fontFamily: 'monospace', fontSize: 10, color: colors.primary },
+  temps: { fontFamily: 'monospace', fontSize: typography.size.sm, fontWeight: typography.weight.bold, color: colors.textPrimary }, inverse: { color: colors.textInverse },
 });

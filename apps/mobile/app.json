@@ -6,6 +6,14 @@
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
+    "plugins": [
+      [
+        "expo-location",
+        {
+          "locationWhenInUsePermission": "Allow Weather App to use your location to show the local forecast."
+        }
+      ]
+    ],
     "ios": {
       "supportsTablet": true
     },

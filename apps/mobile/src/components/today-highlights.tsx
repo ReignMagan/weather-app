@@ -1,142 +1,21 @@
 import { StyleSheet, Text, View } from 'react-native';
+import { PixelIcon } from './pixel-icon';
+import { colors, spacing, typography } from '../theme';
 
-import { colors, radius, spacing, typography } from '../theme';
-import { getUvIndexLabel } from '../utils/uv-index';
-import { getPrecipitationLabel } from '../utils/precipitation';
+type Props = { sunrise: string; sunset: string; uvIndexMax: number; precipitationProbabilityMax: number; precipitationSum: number; precipitationUnit: string; timezone: string };
+type IconName = 'cloud' | 'cloudSun' | 'moon';
 
-import { getRainChanceLabel } from '../utils/rain-chance';
-
-type TodayHighlightsProps = {
-  sunrise: string;
-  sunset: string;
-  uvIndexMax: number;
-  precipitationProbabilityMax: number;
-  precipitationSum: number;
-  precipitationUnit: string;
-  timezone: string;
-};
-
-function formatTime(value: string, timezone: string) {
-  const date = new Date(value);
-
-  return date.toLocaleTimeString([], {
-    hour: 'numeric',
-    minute: '2-digit',
-    timeZone: timezone,
-  });
+export function TodayHighlights({ sunrise, sunset, uvIndexMax, precipitationProbabilityMax, timezone }: Props) {
+  const items: { icon: IconName; label: string; value: string }[] = [
+    { icon: 'cloudSun', label: 'Sunrise', value: formatTime(sunrise, timezone) }, { icon: 'moon', label: 'Sunset', value: formatTime(sunset, timezone) },
+    { icon: 'cloudSun', label: 'UV index', value: uvIndexMax.toFixed(1) }, { icon: 'cloud', label: 'Precip.', value: `${precipitationProbabilityMax}%` },
+  ];
+  return <View style={styles.frame}>{items.map((item) => <View key={item.label} style={styles.item}><PixelIcon name={item.icon} size={28} color={item.label === 'UV index' ? colors.sunshine : colors.primary} /><Text style={styles.label}>{item.label.toUpperCase()}</Text><Text style={styles.value}>{item.value}</Text></View>)}</View>;
 }
-
-export function TodayHighlights({
-  sunrise,
-  sunset,
-  uvIndexMax,
-  precipitationProbabilityMax,
-  precipitationSum,
-  precipitationUnit,
-  timezone,
-}: TodayHighlightsProps) {
-  return (
-    <View style={styles.container}>
-      
-      <View style={styles.grid}>
-        <HighlightCard
-            icon="🌅"
-            label="Sunrise"
-            value={formatTime(sunrise, timezone)}
-            />
-
-            <HighlightCard
-            icon="🌇"
-            label="Sunset"
-            value={formatTime(sunset, timezone)}
-            />
-
-            <HighlightCard
-            icon="☀️"
-            label="UV Index"
-            value={`${uvIndexMax.toFixed(1)} · ${getUvIndexLabel(uvIndexMax)}`}
-            />
-
-            <HighlightCard
-            icon="🌧️"
-            label="Rain Chance"
-            value={`${precipitationProbabilityMax}% · ${getRainChanceLabel(
-                precipitationProbabilityMax,
-            )}`}
-            />
-
-            <HighlightCard
-            icon="💧"
-            label="Precipitation"
-            value={`${precipitationSum} ${precipitationUnit} · ${getPrecipitationLabel(
-                precipitationSum,
-            )}`}
-            />
-      </View>
-    </View>
-  );
-}
-
-type HighlightCardProps = {
-  icon: string;
-  label: string;
-  value: string;
-};
-
-function HighlightCard({
-  icon,
-  label,
-  value,
-}: HighlightCardProps) {
-  return (
-    <View style={styles.card}>
-      <Text style={styles.icon}>{icon}</Text>
-      <Text style={styles.label}>{label}</Text>
-      <Text style={styles.value}>{value}</Text>
-    </View>
-  );
-}
-
+function formatTime(value: string, timezone: string) { return new Date(value).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', timeZone: timezone }); }
 const styles = StyleSheet.create({
-  container: {
-    gap: spacing.md,
-  },
-
-  title: {
-    fontSize: typography.size.lg,
-    fontWeight: typography.weight.semibold,
-    color: colors.textPrimary,
-  },
-
-  grid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: spacing.md,
-  },
-
-  card: {
-    width: '47%',
-    minHeight: 88,
-    justifyContent: 'center',
-    padding: spacing.md,
-    borderRadius: radius.lg,
-    backgroundColor: colors.surface,
-  },
-
-  label: {
-    fontSize: typography.size.sm,
-    color: colors.textSecondary,
-  },
-
-  value: {
-    marginTop: spacing.xs,
-    fontSize: typography.size.md,
-    fontWeight: typography.weight.semibold,
-    color: colors.textPrimary,
-  },
-
-  icon: {
-  marginBottom: spacing.sm,
-  fontSize: 24,
-},
+  frame: { flexDirection: 'row', borderWidth: 3, borderColor: colors.border, backgroundColor: colors.surface, shadowColor: colors.shadow, shadowOffset: { width: 5, height: 5 }, shadowOpacity: 1, shadowRadius: 0 },
+  item: { flex: 1, minHeight: 96, alignItems: 'center', justifyContent: 'center', paddingVertical: spacing.sm, borderRightWidth: 2, borderRightColor: colors.border },
+  label: { marginTop: spacing.xs, fontFamily: 'monospace', fontSize: 10, fontWeight: typography.weight.bold, color: colors.textSecondary },
+  value: { marginTop: 2, fontFamily: 'monospace', fontSize: typography.size.sm, fontWeight: typography.weight.bold, color: colors.textPrimary },
 });

@@ -4,6 +4,7 @@ import type { WeatherResponse } from '../types/weather';
 
 import {
   getCurrentCoordinates,
+  LocationError,
   reverseGeocodeCoordinates,
   type DeviceCoordinates,
   type LocationName,
@@ -90,13 +91,14 @@ export function useWeather(): UseWeatherResult {
         }
       }
     } catch (error) {
-      logger.error('Weather loading failed.', error);
-
-      if (error instanceof ApiError) {
+      if (error instanceof LocationError || error instanceof ApiError) {
+        logger.info('Weather loading could not complete.', error.message);
         setError(error.message);
 
         return;
       }
+
+      logger.error('Weather loading failed unexpectedly.', error);
 
       setError(error instanceof Error ? error.message : 'Unable to load weather.');
     } finally {

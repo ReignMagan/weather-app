@@ -1,6 +1,7 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { colors, radius, spacing, typography } from '../theme';
+import { PixelIcon } from './pixel-icon';
 
 type ErrorStateProps = {
   message: string;
@@ -14,7 +15,7 @@ export function ErrorState({
   return (
     <View style={styles.container}>
       <View style={styles.card}>
-        <Text style={styles.icon}>⚠️</Text>
+        <PixelIcon name="alert" size={40} color={colors.warning} />
 
         <Text style={styles.title}>
           Unable to load weather
@@ -53,16 +54,19 @@ const styles = StyleSheet.create({
   card: {
     alignItems: 'center',
     padding: spacing.xl,
+    borderWidth: 3,
+    borderColor: colors.border,
     borderRadius: radius.xl,
     backgroundColor: colors.surface,
-  },
-
-  icon: {
-    fontSize: 40,
+    shadowColor: colors.shadow,
+    shadowOffset: { width: 6, height: 6 },
+    shadowOpacity: 1,
+    shadowRadius: 0,
   },
 
   title: {
     marginTop: spacing.md,
+    fontFamily: 'monospace',
     fontSize: typography.size.lg,
     fontWeight: typography.weight.semibold,
     textAlign: 'center',
@@ -82,6 +86,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: spacing.xl,
     paddingVertical: spacing.md,
+    borderWidth: 3,
+    borderColor: colors.border,
     borderRadius: radius.full,
     backgroundColor: colors.primary,
   },
@@ -91,6 +97,7 @@ const styles = StyleSheet.create({
   },
 
   buttonText: {
+    fontFamily: 'monospace',
     fontSize: typography.size.md,
     fontWeight: typography.weight.semibold,
     color: colors.textInverse,

@@ -5,7 +5,7 @@ import { WeatherScreen } from './src/screens/weather.screen';
 export default function App() {
   return (
     <>
-      <StatusBar style="auto" />
+      <StatusBar style="dark" />
       <WeatherScreen />
     </>
   );

@@ -1,163 +1,24 @@
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
-
-import { colors, radius, spacing, typography } from '../theme';
-
 import type { WeatherCondition } from '../types/weather';
-import { getWeatherIcon } from '../utils/weather-icon';
+import { PixelIcon } from './pixel-icon';
+import { colors, spacing, typography } from '../theme';
 
-type HourlyForecastItem = {
-  time: string;
-  temperature: number;
-  condition: WeatherCondition;
-  conditionLabel: string;
-  precipitationProbability: number;
-};
+type Item = { time: string; temperature: number; condition: WeatherCondition; conditionLabel: string; precipitationProbability: number };
+type Props = { items: Item[]; temperatureUnit: string; timezone: string };
 
-type HourlyForecastProps = {
-  items: HourlyForecastItem[];
-  temperatureUnit: string;
-  timezone: string;
-};
-
-function formatHour(time: string, timezone: string) {
-  const date = new Date(time);
-
-  return date.toLocaleTimeString([], {
-    hour: 'numeric',
-    timeZone: timezone,
-  });
+export function HourlyForecast({ items, temperatureUnit, timezone }: Props) {
+  return <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.list}>{items.map((item, index) => {
+    const selected = index === 0;
+    return <View key={item.time} style={[styles.card, selected && styles.selected]}><Text style={[styles.time, selected && styles.inverse]}>{selected ? 'NOW' : formatHour(item.time, timezone)}</Text><PixelIcon name={weatherIcon(item.condition)} size={32} color={selected ? colors.sunshine : colors.primary} /><Text style={[styles.temperature, selected && styles.inverse]}>{Math.round(item.temperature)}{temperatureUnit}</Text><Text style={[styles.rain, selected && styles.inverse]}>{item.precipitationProbability}% RAIN</Text></View>;
+  })}</ScrollView>;
 }
-
-export function HourlyForecast({
-  items,
-  temperatureUnit,
-  timezone,
-}: HourlyForecastProps) {
-  return (
-    <View style={styles.section}>
-
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={styles.list}
-      >
-        {items.map((item, index) => (
-          <View
-            key={item.time}
-            style={[
-                styles.card,
-                index === 0 && styles.currentCard,
-            ]}
-            >
-            <Text
-                style={[
-                styles.time,
-                index === 0 && styles.currentTime,
-                ]}
-            >
-                {index === 0 ? 'Now' : formatHour(item.time, timezone)}
-            </Text>
-
-            <Text style={styles.icon}>
-                {getWeatherIcon(item.condition)}
-            </Text>
-
-            <Text style={styles.temperature}>
-                {Math.round(item.temperature)}°
-                {temperatureUnit}
-            </Text>
-
-            <Text
-                numberOfLines={2}
-                style={styles.condition}
-            >
-                {item.conditionLabel}
-            </Text>
-
-            <View style={styles.rainRow}>
-                <Text style={styles.rainIcon}>💧</Text>
-
-                <Text style={styles.precipitation}>
-                {item.precipitationProbability}%
-                </Text>
-            </View>
-            </View>
-        ))}
-      </ScrollView>
-    </View>
-  );
-}
-
+function formatHour(time: string, timezone: string) { return new Date(time).toLocaleTimeString([], { hour: 'numeric', timeZone: timezone }); }
+function weatherIcon(condition: WeatherCondition): 'cloud' | 'cloudSun' { return condition === 'clear' ? 'cloudSun' : 'cloud'; }
 const styles = StyleSheet.create({
-  section: {
-    gap: spacing.md,
-  },
-
-  title: {
-    fontSize: typography.size.lg,
-    fontWeight: typography.weight.semibold,
-    color: colors.textPrimary,
-  },
-
-  list: {
-    gap: spacing.md,
-    paddingRight: spacing.xl,
-  },
-  
-  card: {
-    width: 112,
-    minHeight: 170,
-    padding: spacing.md,
-    alignItems: 'center',
-    borderRadius: radius.lg,
-    backgroundColor: colors.surface,
-    gap: spacing.sm,
-  },
-
-  currentCard: {
-  backgroundColor: colors.primarySoft,
-  },
-
-  time: {
-    fontSize: typography.size.sm,
-    fontWeight: typography.weight.medium,
-    color: colors.textSecondary,
-  },
-
-  currentTime: {
-    color: colors.primary,
-    fontWeight: typography.weight.semibold,
-  },
-
-  icon: {
-  fontSize: 30,
-  },
-
-  temperature: {
-    fontSize: typography.size.xl,
-    fontWeight: typography.weight.semibold,
-    color: colors.textPrimary,
-  },
-  
-  condition: {
-    minHeight: 36,
-    fontSize: typography.size.sm,
-    textAlign: 'center',
-    color: colors.textPrimary,
-  },
-
-  rainRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: spacing.xs,
-  },
-
-  rainIcon: {
-    fontSize: typography.size.xs,
-},
-
-  precipitation: {
-    fontSize: typography.size.xs,
-    color: colors.primary,
-  },
+  list: { gap: spacing.sm, paddingRight: spacing.xl, paddingBottom: 5 },
+  card: { width: 104, minHeight: 142, alignItems: 'center', justifyContent: 'space-between', padding: spacing.md, borderWidth: 3, borderColor: colors.border, backgroundColor: colors.surface, shadowColor: colors.shadow, shadowOffset: { width: 4, height: 4 }, shadowOpacity: 1, shadowRadius: 0 },
+  selected: { backgroundColor: colors.primary },
+  time: { fontFamily: 'monospace', fontSize: typography.size.sm, fontWeight: typography.weight.bold, color: colors.textPrimary },
+  temperature: { fontFamily: 'monospace', fontSize: typography.size.xl, fontWeight: typography.weight.bold, color: colors.textPrimary },
+  rain: { fontFamily: 'monospace', fontSize: 10, fontWeight: typography.weight.bold, color: colors.primary }, inverse: { color: colors.textInverse },
 });

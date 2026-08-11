@@ -6,11 +6,11 @@ export const typography = {
     lg: 20,
     xl: 24,
     xxl: 32,
-    display: 72,
+    display: 68,
   },
 
   weight: {
-    regular: '400',
+    regular: '500',
     medium: '500',
     semibold: '600',
     bold: '700',
