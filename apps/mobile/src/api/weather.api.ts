@@ -20,16 +20,10 @@ export async function getWeather({
     longitude,
   });
 
-  const data = await apiRequest<unknown>(
-    url,
-  );
+  const data = await apiRequest<unknown>(url);
 
   if (!isWeatherResponse(data)) {
-    throw new ApiError(
-      'The weather server returned invalid data.',
-      null,
-      'UNKNOWN',
-    );
+    throw new ApiError('The weather server returned invalid data.', null, 'UNKNOWN');
   }
 
   return data;

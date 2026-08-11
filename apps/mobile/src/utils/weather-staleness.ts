@@ -1,10 +1,7 @@
 const STALE_AFTER_MS = 30 * 60 * 1000;
 
-export function isWeatherStale(
-  generatedAt: string,
-): boolean {
-  const generatedTime =
-    new Date(generatedAt).getTime();
+export function isWeatherStale(generatedAt: string): boolean {
+  const generatedTime = new Date(generatedAt).getTime();
 
   if (Number.isNaN(generatedTime)) {
     return true;

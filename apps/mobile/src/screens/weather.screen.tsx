@@ -104,7 +104,6 @@ export function WeatherScreen() {
         )}
 
         <WeatherSummary
-          location={locationLabel}
           temperature={weather.current.temperature}
           temperatureUnit={weather.units.temperature}
           condition={weather.current.condition}
@@ -120,15 +119,11 @@ export function WeatherScreen() {
             humidity={weather.current.humidity}
             windSpeed={weather.current.windSpeed}
             windSpeedUnit={weather.units.windSpeed}
-            windGusts={weather.current.windGusts}
             windDirection={weather.current.windDirection}
             pressure={weather.current.pressure}
             visibility={weather.current.visibility}
-            precipitation={weather.current.precipitation}
-            rain={weather.current.rain}
             pressureUnit={weather.units.pressure}
             visibilityUnit={weather.units.visibility}
-            precipitationUnit={weather.units.precipitation}
           />
         </Section>
 
@@ -139,8 +134,6 @@ export function WeatherScreen() {
               sunset={today.sunset}
               uvIndexMax={today.uvIndexMax}
               precipitationProbabilityMax={today.precipitationProbabilityMax}
-              precipitationSum={today.precipitationSum}
-              precipitationUnit={weather.units.precipitation}
               timezone={weather.timezone}
             />
           </Section>
@@ -185,12 +178,5 @@ const styles = StyleSheet.create({
     fontSize: typography.size.md,
     textAlign: 'center',
     color: colors.textSecondary,
-  },
-
-  error: {
-    marginBottom: spacing.lg,
-    fontSize: typography.size.md,
-    textAlign: 'center',
-    color: colors.danger,
   },
 });

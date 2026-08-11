@@ -7,9 +7,7 @@ describe('validateCoordinates', () => {
       longitude: 122.96,
     };
 
-    expect(
-      validateCoordinates(coordinates),
-    ).toEqual(coordinates);
+    expect(validateCoordinates(coordinates)).toEqual(coordinates);
   });
 
   it('accepts boundary coordinates', () => {

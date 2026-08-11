@@ -44,19 +44,13 @@ export async function getCurrentCoordinates(): Promise<DeviceCoordinates> {
 }
 
 async function getNativeCoordinates(): Promise<DeviceCoordinates> {
+  const permission = await Location.requestForegroundPermissionsAsync();
 
-  const permission =
-    await Location.requestForegroundPermissionsAsync();
-
-  if (
-    permission.status !==
-    Location.PermissionStatus.GRANTED
-  ) {
+  if (permission.status !== Location.PermissionStatus.GRANTED) {
     throw new LocationError('Location permission was denied.');
   }
 
-  const servicesEnabled =
-    await Location.hasServicesEnabledAsync();
+  const servicesEnabled = await Location.hasServicesEnabledAsync();
 
   if (!servicesEnabled) {
     throw new LocationError('Location services are disabled.');
@@ -80,8 +74,7 @@ async function getNativeCoordinates(): Promise<DeviceCoordinates> {
       return coordinatesFromLocation(lastKnownLocation);
     }
 
-    const anyLastKnownLocation = await Location.getLastKnownPositionAsync()
-      .catch(() => null);
+    const anyLastKnownLocation = await Location.getLastKnownPositionAsync().catch(() => null);
 
     if (anyLastKnownLocation) {
       return coordinatesFromLocation(anyLastKnownLocation);
@@ -94,10 +87,7 @@ async function getNativeCoordinates(): Promise<DeviceCoordinates> {
 }
 
 function configuredFallbackOrThrow(error: unknown): DeviceCoordinates {
-  if (
-    env.fallbackLatitude !== null &&
-    env.fallbackLongitude !== null
-  ) {
+  if (env.fallbackLatitude !== null && env.fallbackLongitude !== null) {
     return validateCoordinates({
       latitude: env.fallbackLatitude,
       longitude: env.fallbackLongitude,
@@ -160,29 +150,37 @@ function getWebCoordinates(): Promise<DeviceCoordinates> {
   return new Promise<DeviceCoordinates>((resolve, reject) => {
     geolocation.getCurrentPosition(
       (position) => {
-        resolve(validateCoordinates({
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude,
-        }));
+        resolve(
+          validateCoordinates({
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+          }),
+        );
       },
       (error) => {
         if (error.code === 1) {
-          reject(new LocationError(
-            'Location access is blocked for this site. Allow location in your browser site settings and try again.',
-          ));
+          reject(
+            new LocationError(
+              'Location access is blocked for this site. Allow location in your browser site settings and try again.',
+            ),
+          );
           return;
         }
 
         if (error.code === 2) {
-          reject(new LocationError(
-            'Your browser could not determine a location. Check the operating-system location permission for your browser.',
-          ));
+          reject(
+            new LocationError(
+              'Your browser could not determine a location. Check the operating-system location permission for your browser.',
+            ),
+          );
           return;
         }
 
-        reject(new LocationError(
-          'The browser location request timed out. Check your browser location permission and try again.',
-        ));
+        reject(
+          new LocationError(
+            'The browser location request timed out. Check your browser location permission and try again.',
+          ),
+        );
       },
       {
         enableHighAccuracy: false,
@@ -242,11 +240,10 @@ async function withTimeout<T>(promise: Promise<T>, timeoutMs: number): Promise<T
 export async function reverseGeocodeCoordinates(
   coordinates: DeviceCoordinates,
 ): Promise<LocationName> {
-  const results =
-    await Location.reverseGeocodeAsync({
-      latitude: coordinates.latitude,
-      longitude: coordinates.longitude,
-    });
+  const results = await Location.reverseGeocodeAsync({
+    latitude: coordinates.latitude,
+    longitude: coordinates.longitude,
+  });
 
   const location = results[0];
 
@@ -260,21 +257,12 @@ export async function reverseGeocodeCoordinates(
   }
 
   return {
-    city:
-      location.city ??
-      location.district ??
-      null,
+    city: location.city ?? location.district ?? null,
 
-    province:
-      location.subregion ??
-      null,
+    province: location.subregion ?? null,
 
-    region:
-      location.region ??
-      null,
+    region: location.region ?? null,
 
-    country:
-      location.country ??
-      null,
+    country: location.country ?? null,
   };
 }

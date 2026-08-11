@@ -1,14 +1,11 @@
 import type { WeatherResponse } from '../types/weather';
 
-export function isWeatherResponse(
-  value: unknown,
-): value is WeatherResponse {
+export function isWeatherResponse(value: unknown): value is WeatherResponse {
   if (!value || typeof value !== 'object') {
     return false;
   }
 
-  const weather =
-    value as Partial<WeatherResponse>;
+  const weather = value as Partial<WeatherResponse>;
 
   if (
     !weather.location ||

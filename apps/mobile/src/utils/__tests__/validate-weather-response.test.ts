@@ -10,8 +10,7 @@ describe('isWeatherResponse', () => {
 
     timezone: 'Asia/Manila',
 
-    generatedAt:
-      '2026-08-10T08:00:00.000Z',
+    generatedAt: '2026-08-10T08:00:00.000Z',
 
     units: {
       temperature: '°C',
@@ -46,15 +45,11 @@ describe('isWeatherResponse', () => {
   };
 
   it('accepts a valid weather response', () => {
-    expect(
-      isWeatherResponse(validWeather),
-    ).toBe(true);
+    expect(isWeatherResponse(validWeather)).toBe(true);
   });
 
   it('rejects null', () => {
-    expect(
-      isWeatherResponse(null),
-    ).toBe(false);
+    expect(isWeatherResponse(null)).toBe(false);
   });
 
   it('rejects missing current weather', () => {
@@ -63,9 +58,7 @@ describe('isWeatherResponse', () => {
       current: undefined,
     };
 
-    expect(
-      isWeatherResponse(invalidWeather),
-    ).toBe(false);
+    expect(isWeatherResponse(invalidWeather)).toBe(false);
   });
 
   it('rejects invalid hourly data', () => {
@@ -74,9 +67,7 @@ describe('isWeatherResponse', () => {
       hourly: null,
     };
 
-    expect(
-      isWeatherResponse(invalidWeather),
-    ).toBe(false);
+    expect(isWeatherResponse(invalidWeather)).toBe(false);
   });
 
   it('rejects invalid temperature', () => {
@@ -88,8 +79,6 @@ describe('isWeatherResponse', () => {
       },
     };
 
-    expect(
-      isWeatherResponse(invalidWeather),
-    ).toBe(false);
+    expect(isWeatherResponse(invalidWeather)).toBe(false);
   });
 });

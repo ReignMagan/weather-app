@@ -15,14 +15,8 @@ function formatUpdatedTime(value: string) {
   });
 }
 
-export function LastUpdated({
-  generatedAt,
-}: LastUpdatedProps) {
-  return (
-    <Text style={styles.text}>
-      LAST UPDATED: {formatUpdatedTime(generatedAt)}
-    </Text>
-  );
+export function LastUpdated({ generatedAt }: LastUpdatedProps) {
+  return <Text style={styles.text}>LAST UPDATED: {formatUpdatedTime(generatedAt)}</Text>;
 }
 
 const styles = StyleSheet.create({

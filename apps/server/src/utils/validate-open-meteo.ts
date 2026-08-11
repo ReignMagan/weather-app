@@ -1,8 +1,6 @@
 import type { OpenMeteoResponse } from '../types/open-meteo';
 
-export function validateOpenMeteoResponse(
-  data: OpenMeteoResponse,
-): OpenMeteoResponse {
+export function validateOpenMeteoResponse(data: OpenMeteoResponse): OpenMeteoResponse {
   if (!data) {
     throw new Error('Open-Meteo returned an empty response');
   }

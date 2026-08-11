@@ -5,13 +5,9 @@ import { colors, radius, spacing, typography } from '../theme';
 export function StaleWeatherBanner() {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>
-        Showing older weather data
-      </Text>
+      <Text style={styles.title}>Showing older weather data</Text>
 
-      <Text style={styles.message}>
-        Updating with the latest forecast…
-      </Text>
+      <Text style={styles.message}>Updating with the latest forecast…</Text>
     </View>
   );
 }

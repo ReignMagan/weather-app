@@ -36,9 +36,7 @@ export function getWeatherCondition(code: number): WeatherCondition {
   return 'unknown';
 }
 
-export function getWeatherConditionLabel(
-  condition: WeatherCondition,
-): string {
+export function getWeatherConditionLabel(condition: WeatherCondition): string {
   switch (condition) {
     case 'clear':
       return 'Clear';

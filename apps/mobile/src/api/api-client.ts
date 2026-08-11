@@ -11,14 +11,8 @@ type ApiRequestOptions = RequestInit & {
 
 const DEFAULT_TIMEOUT_MS = 10000;
 
-export async function apiRequest<T>(
-  url: string,
-  options: ApiRequestOptions = {},
-): Promise<T> {
-  const {
-    timeoutMs = DEFAULT_TIMEOUT_MS,
-    ...requestOptions
-  } = options;
+export async function apiRequest<T>(url: string, options: ApiRequestOptions = {}): Promise<T> {
+  const { timeoutMs = DEFAULT_TIMEOUT_MS, ...requestOptions } = options;
 
   const controller = new AbortController();
 
@@ -33,12 +27,10 @@ export async function apiRequest<T>(
     });
 
     if (!response.ok) {
-      let message =
-        `Request failed with status ${response.status}`;
+      let message = `Request failed with status ${response.status}`;
 
       try {
-        const errorResponse =
-          (await response.json()) as ApiErrorResponse;
+        const errorResponse = (await response.json()) as ApiErrorResponse;
 
         if (errorResponse.message) {
           message = errorResponse.message;
@@ -47,11 +39,7 @@ export async function apiRequest<T>(
         // Keep fallback message.
       }
 
-      throw new ApiError(
-        message,
-        response.status,
-        'HTTP',
-      );
+      throw new ApiError(message, response.status, 'HTTP');
     }
 
     return (await response.json()) as T;
@@ -60,15 +48,8 @@ export async function apiRequest<T>(
       throw error;
     }
 
-    if (
-      error instanceof Error &&
-      error.name === 'AbortError'
-    ) {
-      throw new ApiError(
-        'The request timed out. Please try again.',
-        408,
-        'TIMEOUT',
-      );
+    if (error instanceof Error && error.name === 'AbortError') {
+      throw new ApiError('The request timed out. Please try again.', 408, 'TIMEOUT');
     }
 
     if (error instanceof TypeError) {

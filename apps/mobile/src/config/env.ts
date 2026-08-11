@@ -1,38 +1,24 @@
 import { Platform } from 'react-native';
 
-function requireEnv(
-  name: string,
-  value: string | undefined,
-): string {
+function requireEnv(name: string, value: string | undefined): string {
   if (!value) {
-    throw new Error(
-      `Missing required environment variable: ${name}`,
-    );
+    throw new Error(`Missing required environment variable: ${name}`);
   }
 
   return value;
 }
 
-function validateApiBaseUrl(
-  value: string,
-): string {
+function validateApiBaseUrl(value: string): string {
   let url: URL;
 
   try {
     url = new URL(value);
   } catch {
-    throw new Error(
-      'EXPO_PUBLIC_API_BASE_URL must be a valid URL.',
-    );
+    throw new Error('EXPO_PUBLIC_API_BASE_URL must be a valid URL.');
   }
 
-  if (
-    url.protocol !== 'http:' &&
-    url.protocol !== 'https:'
-  ) {
-    throw new Error(
-      'EXPO_PUBLIC_API_BASE_URL must use http or https.',
-    );
+  if (url.protocol !== 'http:' && url.protocol !== 'https:') {
+    throw new Error('EXPO_PUBLIC_API_BASE_URL must use http or https.');
   }
 
   return value.replace(/\/$/, '');
@@ -70,19 +56,10 @@ function optionalCoordinate(value: string | undefined): number | null {
   return Number.isFinite(coordinate) ? coordinate : null;
 }
 
-const apiBaseUrl = requireEnv(
-  'EXPO_PUBLIC_API_BASE_URL',
-  process.env.EXPO_PUBLIC_API_BASE_URL,
-);
+const apiBaseUrl = requireEnv('EXPO_PUBLIC_API_BASE_URL', process.env.EXPO_PUBLIC_API_BASE_URL);
 
 export const env = {
-  apiBaseUrl: resolveApiBaseUrl(
-    apiBaseUrl,
-  ),
-  fallbackLatitude: optionalCoordinate(
-    process.env.EXPO_PUBLIC_FALLBACK_LATITUDE,
-  ),
-  fallbackLongitude: optionalCoordinate(
-    process.env.EXPO_PUBLIC_FALLBACK_LONGITUDE,
-  ),
+  apiBaseUrl: resolveApiBaseUrl(apiBaseUrl),
+  fallbackLatitude: optionalCoordinate(process.env.EXPO_PUBLIC_FALLBACK_LATITUDE),
+  fallbackLongitude: optionalCoordinate(process.env.EXPO_PUBLIC_FALLBACK_LONGITUDE),
 } as const;

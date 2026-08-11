@@ -8,35 +8,23 @@ type ErrorStateProps = {
   onRetry: () => void;
 };
 
-export function ErrorState({
-  message,
-  onRetry,
-}: ErrorStateProps) {
+export function ErrorState({ message, onRetry }: ErrorStateProps) {
   return (
     <View style={styles.container}>
       <View style={styles.card}>
         <PixelIcon name="alert" size={40} color={colors.warning} />
 
-        <Text style={styles.title}>
-          Unable to load weather
-        </Text>
+        <Text style={styles.title}>Unable to load weather</Text>
 
-        <Text style={styles.message}>
-          {message}
-        </Text>
+        <Text style={styles.message}>{message}</Text>
 
         <Pressable
           accessibilityRole="button"
           accessibilityLabel="Try loading weather again"
           onPress={onRetry}
-          style={({ pressed }) => [
-            styles.button,
-            pressed && styles.buttonPressed,
-          ]}
+          style={({ pressed }) => [styles.button, pressed && styles.buttonPressed]}
         >
-          <Text style={styles.buttonText}>
-            Try Again
-          </Text>
+          <Text style={styles.buttonText}>Try Again</Text>
         </Pressable>
       </View>
     </View>

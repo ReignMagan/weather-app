@@ -1,8 +1,4 @@
-export type ApiErrorCode =
-  | 'TIMEOUT'
-  | 'NETWORK'
-  | 'HTTP'
-  | 'UNKNOWN';
+export type ApiErrorCode = 'TIMEOUT' | 'NETWORK' | 'HTTP' | 'UNKNOWN';
 
 export class ApiError extends Error {
   constructor(

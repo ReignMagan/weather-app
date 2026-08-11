@@ -7,6 +7,5 @@ dotenv.config({
 
 export const env = {
   port: Number(process.env.PORT) || 3100,
-  openMeteoBaseUrl:
-    process.env.OPEN_METEO_BASE_URL ?? 'https://api.open-meteo.com/v1',
+  openMeteoBaseUrl: process.env.OPEN_METEO_BASE_URL ?? 'https://api.open-meteo.com/v1',
 };

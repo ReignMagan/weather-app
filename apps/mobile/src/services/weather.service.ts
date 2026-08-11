@@ -6,11 +6,8 @@ type GetWeatherParams = {
   longitude: number;
 };
 
-export async function fetchWeather(
-  params: GetWeatherParams,
-) {
-  const coordinates =
-    validateCoordinates(params);
+export async function fetchWeather(params: GetWeatherParams) {
+  const coordinates = validateCoordinates(params);
 
   return getWeather(coordinates);
 }

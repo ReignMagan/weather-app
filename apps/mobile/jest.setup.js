@@ -1,4 +1,3 @@
 /* global process */
 
-process.env.EXPO_PUBLIC_API_BASE_URL =
-  'http://localhost:3100/api';
+process.env.EXPO_PUBLIC_API_BASE_URL = 'http://localhost:3100/api';

@@ -1,8 +1,6 @@
 import type { LocationName } from '../services/location.service';
 
-export function formatLocationName(
-  location: LocationName | null,
-): string {
+export function formatLocationName(location: LocationName | null): string {
   if (!location) {
     return 'Current Location';
   }

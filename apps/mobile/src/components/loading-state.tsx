@@ -6,9 +6,7 @@ type LoadingStateProps = {
   message?: string;
 };
 
-export function LoadingState({
-  message = 'Loading...',
-}: LoadingStateProps) {
+export function LoadingState({ message = 'Loading...' }: LoadingStateProps) {
   return (
     <View style={styles.container}>
       <View style={styles.card}>
@@ -16,9 +14,7 @@ export function LoadingState({
 
         <Text style={styles.title}>Getting things ready</Text>
 
-        <Text style={styles.message}>
-          {message}
-        </Text>
+        <Text style={styles.message}>{message}</Text>
       </View>
     </View>
   );

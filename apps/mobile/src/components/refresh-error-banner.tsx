@@ -7,19 +7,13 @@ type RefreshErrorBannerProps = {
   onRetry: () => void;
 };
 
-export function RefreshErrorBanner({
-  message,
-  onRetry,
-}: RefreshErrorBannerProps) {
+export function RefreshErrorBanner({ message, onRetry }: RefreshErrorBannerProps) {
   return (
     <View style={styles.container}>
       <View style={styles.textGroup}>
         <Text style={styles.title}>Refresh failed</Text>
 
-        <Text
-          numberOfLines={2}
-          style={styles.message}
-        >
+        <Text numberOfLines={2} style={styles.message}>
           {message}
         </Text>
       </View>
@@ -28,10 +22,7 @@ export function RefreshErrorBanner({
         accessibilityRole="button"
         accessibilityLabel="Retry weather refresh"
         onPress={onRetry}
-        style={({ pressed }) => [
-          styles.button,
-          pressed && styles.buttonPressed,
-        ]}
+        style={({ pressed }) => [styles.button, pressed && styles.buttonPressed]}
       >
         <Text style={styles.buttonText}>Retry</Text>
       </Pressable>

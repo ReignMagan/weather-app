@@ -5,8 +5,7 @@ jest.mock('../../api/weather.api', () => ({
   getWeather: jest.fn(),
 }));
 
-const mockedGetWeather =
-  getWeather as jest.MockedFunction<typeof getWeather>;
+const mockedGetWeather = getWeather as jest.MockedFunction<typeof getWeather>;
 
 describe('fetchWeather', () => {
   beforeEach(() => {
@@ -28,9 +27,7 @@ describe('fetchWeather', () => {
       daily: [],
     };
 
-    mockedGetWeather.mockResolvedValue(
-      response as never,
-    );
+    mockedGetWeather.mockResolvedValue(response as never);
 
     await fetchWeather({
       latitude: 10.65,

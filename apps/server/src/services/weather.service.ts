@@ -6,10 +6,8 @@ import { getWeatherCondition, getWeatherConditionLabel } from '../utils/weather-
 
 export async function getWeather(latitude: number, longitude: number): Promise<WeatherResponse> {
   const data = await fetchOpenMeteoWeather(latitude, longitude);
-  
-  const currentCondition = getWeatherCondition(
-    data.current.weather_code,
-  );
+
+  const currentCondition = getWeatherCondition(data.current.weather_code);
 
   return {
     location: {

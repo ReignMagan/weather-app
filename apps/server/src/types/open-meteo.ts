@@ -1,6 +1,6 @@
 export interface OpenMeteoCurrentWeather {
   time: string;
-  is_day: number;  
+  is_day: number;
   temperature_2m: number;
   apparent_temperature: number;
   relative_humidity_2m: number;

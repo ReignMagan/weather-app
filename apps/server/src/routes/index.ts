@@ -6,13 +6,13 @@ import type { ApiMessageResponse } from '@weather-app/shared';
 
 const router = Router();
 
-    router.get('/', (_req, res) => {
-    const response: ApiMessageResponse = {
-        message: 'Weather App API is running',
-    };
+router.get('/', (_req, res) => {
+  const response: ApiMessageResponse = {
+    message: 'Weather App API is running',
+  };
 
-    res.json(response);
-    });
+  res.json(response);
+});
 
 router.use('/health', healthRouter);
 
