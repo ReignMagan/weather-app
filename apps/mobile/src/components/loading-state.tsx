@@ -1,6 +1,6 @@
 import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 
-import { colors, spacing, typography } from '../theme';
+import { colors, radius, spacing, typography } from '../theme';
 
 type LoadingStateProps = {
   message?: string;
@@ -11,11 +11,15 @@ export function LoadingState({
 }: LoadingStateProps) {
   return (
     <View style={styles.container}>
-      <ActivityIndicator size="large" color={colors.primary} />
+      <View style={styles.card}>
+        <ActivityIndicator size="large" color={colors.primary} />
 
-      <Text style={styles.message}>
-        {message}
-      </Text>
+        <Text style={styles.title}>Getting things ready</Text>
+
+        <Text style={styles.message}>
+          {message}
+        </Text>
+      </View>
     </View>
   );
 }
@@ -23,16 +27,29 @@ export function LoadingState({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
     justifyContent: 'center',
     padding: spacing.xl,
     backgroundColor: colors.background,
   },
 
+  card: {
+    alignItems: 'center',
+    padding: spacing.xl,
+    borderRadius: radius.xl,
+    backgroundColor: colors.surface,
+  },
+
+  title: {
+    marginTop: spacing.lg,
+    fontSize: typography.size.lg,
+    fontWeight: typography.weight.semibold,
+    color: colors.textPrimary,
+  },
+
   message: {
-    marginTop: spacing.md,
+    marginTop: spacing.sm,
     fontSize: typography.size.md,
-    color: colors.textSecondary,
     textAlign: 'center',
+    color: colors.textSecondary,
   },
 });

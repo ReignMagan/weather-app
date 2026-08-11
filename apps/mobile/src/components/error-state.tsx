@@ -1,6 +1,6 @@
-import { Button, StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 
-import { colors, spacing, typography } from '../theme';
+import { colors, radius, spacing, typography } from '../theme';
 
 type ErrorStateProps = {
   message: string;
@@ -13,14 +13,31 @@ export function ErrorState({
 }: ErrorStateProps) {
   return (
     <View style={styles.container}>
-      <Text style={styles.message}>
-        {message}
-      </Text>
+      <View style={styles.card}>
+        <Text style={styles.icon}>⚠️</Text>
 
-      <Button
-        title="Try Again"
-        onPress={onRetry}
-      />
+        <Text style={styles.title}>
+          Unable to load weather
+        </Text>
+
+        <Text style={styles.message}>
+          {message}
+        </Text>
+
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel="Try loading weather again"
+          onPress={onRetry}
+          style={({ pressed }) => [
+            styles.button,
+            pressed && styles.buttonPressed,
+          ]}
+        >
+          <Text style={styles.buttonText}>
+            Try Again
+          </Text>
+        </Pressable>
+      </View>
     </View>
   );
 }
@@ -28,16 +45,54 @@ export function ErrorState({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
     justifyContent: 'center',
     padding: spacing.xl,
     backgroundColor: colors.background,
-    gap: spacing.lg,
+  },
+
+  card: {
+    alignItems: 'center',
+    padding: spacing.xl,
+    borderRadius: radius.xl,
+    backgroundColor: colors.surface,
+  },
+
+  icon: {
+    fontSize: 40,
+  },
+
+  title: {
+    marginTop: spacing.md,
+    fontSize: typography.size.lg,
+    fontWeight: typography.weight.semibold,
+    textAlign: 'center',
+    color: colors.textPrimary,
   },
 
   message: {
+    marginTop: spacing.sm,
     fontSize: typography.size.md,
-    color: colors.danger,
     textAlign: 'center',
+    color: colors.textSecondary,
+  },
+
+  button: {
+    marginTop: spacing.xl,
+    minWidth: 140,
+    alignItems: 'center',
+    paddingHorizontal: spacing.xl,
+    paddingVertical: spacing.md,
+    borderRadius: radius.full,
+    backgroundColor: colors.primary,
+  },
+
+  buttonPressed: {
+    opacity: 0.7,
+  },
+
+  buttonText: {
+    fontSize: typography.size.md,
+    fontWeight: typography.weight.semibold,
+    color: colors.textInverse,
   },
 });

@@ -1,10 +1,13 @@
-import {
-  Button,
-  ScrollView,
-  StyleSheet,
-  Text,
-} from 'react-native';
+import { RefreshControl, ScrollView, StyleSheet, Text } from 'react-native';
 
+import { LastUpdated } from '../components/last-updated';
+
+import { RefreshErrorBanner } from '../components/refresh-error-banner';
+
+import { Section } from '../components/section';
+import { WeatherHeader } from '../components/weather-header';
+
+import { TodayHighlights } from '../components/today-highlights';
 
 import { DailyForecast } from '../components/daily-forecast';
 
@@ -20,20 +23,21 @@ import { HourlyForecast } from '../components/hourly-forecast';
 import { WeatherDetails } from '../components/weather-details';
 import { WeatherSummary } from '../components/weather-summary';
 
-import {
-  colors,
-  spacing,
-  typography,
-} from '../theme';
+import { colors, spacing, typography } from '../theme';
+
+import { formatLocationName } from '../utils/format-location';
+
+import { StaleWeatherBanner } from '../components/stale-weather-banner';
+import { isWeatherStale } from '../utils/weather-staleness';
 
 export function WeatherScreen() {
-  const { weather, loading, error, refresh } = useWeather();
+  const { weather, locationName, loading, error, usingCachedWeather, refresh } = useWeather();
 
-  if (loading) {
+  if (loading && !weather) {
     return <LoadingState message="Loading weather..." />;
   }
 
-  if (error) {
+  if (error && !weather) {
     return (
       <ErrorState
         message={error}
@@ -52,40 +56,111 @@ export function WeatherScreen() {
     );
   }
 
+  const locationLabel = formatLocationName(locationName);
+  const weatherIsStale = usingCachedWeather || isWeatherStale(weather.generatedAt);
+  const today = weather.daily[0];
+
+  const currentHourIndex = weather.hourly.findIndex((item) => item.time >= weather.current.time);
+
+  const upcomingHourly =
+    currentHourIndex >= 0
+      ? weather.hourly.slice(currentHourIndex, currentHourIndex + 12)
+      : weather.hourly.slice(0, 12);
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView
         contentContainerStyle={styles.content}
         showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl
+            refreshing={loading}
+            onRefresh={() => {
+              void refresh();
+            }}
+            tintColor={colors.primary}
+          />
+        }
       >
-        <WeatherSummary
-          location={weather.location.name || 'Current Location'}
-          temperature={weather.current.temperature}
-          condition={weather.current.condition}
-          conditionLabel={weather.current.conditionLabel}
-          apparentTemperature={weather.current.apparentTemperature}
-        />
-
-        <WeatherDetails
-          humidity={weather.current.humidity}
-          windSpeed={weather.current.windSpeed}
-          windSpeedUnit={weather.units.windSpeed}
-        />
-
-        <HourlyForecast
-          items={weather.hourly.slice(0, 12)}
-        />
-
-        <DailyForecast
-          items={weather.daily}
-        />
-
-        <Button
-          title="Refresh"
-          onPress={() => {
+        <WeatherHeader
+          title={locationLabel}
+          refreshing={loading}
+          onRefresh={() => {
             void refresh();
           }}
         />
+
+        <LastUpdated generatedAt={weather.generatedAt} />
+
+        {weatherIsStale && <StaleWeatherBanner />}
+
+        {error && (
+          <RefreshErrorBanner
+            message={error}
+            onRetry={() => {
+              void refresh();
+            }}
+          />
+        )}
+
+        <WeatherSummary
+          location={locationLabel}
+          temperature={weather.current.temperature}
+          temperatureUnit={weather.units.temperature}
+          condition={weather.current.condition}
+          conditionLabel={weather.current.conditionLabel}
+          apparentTemperature={weather.current.apparentTemperature}
+          isDay={weather.current.isDay}
+          currentTime={weather.current.time}
+          timezone={weather.timezone}
+        />
+
+        <Section title="Current Details">
+          <WeatherDetails
+            humidity={weather.current.humidity}
+            windSpeed={weather.current.windSpeed}
+            windSpeedUnit={weather.units.windSpeed}
+            windGusts={weather.current.windGusts}
+            windDirection={weather.current.windDirection}
+            pressure={weather.current.pressure}
+            visibility={weather.current.visibility}
+            precipitation={weather.current.precipitation}
+            rain={weather.current.rain}
+            pressureUnit={weather.units.pressure}
+            visibilityUnit={weather.units.visibility}
+            precipitationUnit={weather.units.precipitation}
+          />
+        </Section>
+
+        {today && (
+          <Section title="Today">
+            <TodayHighlights
+              sunrise={today.sunrise}
+              sunset={today.sunset}
+              uvIndexMax={today.uvIndexMax}
+              precipitationProbabilityMax={today.precipitationProbabilityMax}
+              precipitationSum={today.precipitationSum}
+              precipitationUnit={weather.units.precipitation}
+              timezone={weather.timezone}
+            />
+          </Section>
+        )}
+
+        <Section title="Hourly Forecast">
+          <HourlyForecast
+            items={upcomingHourly}
+            temperatureUnit={weather.units.temperature}
+            timezone={weather.timezone}
+          />
+        </Section>
+
+        <Section title="Daily Forecast">
+          <DailyForecast
+            items={weather.daily}
+            temperatureUnit={weather.units.temperature}
+            timezone={weather.timezone}
+          />
+        </Section>
       </ScrollView>
     </SafeAreaView>
   );
@@ -95,12 +170,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    padding: spacing.xl,
     backgroundColor: colors.background,
   },
 
   content: {
-    gap: spacing.md,
+    padding: spacing.xl,
+    paddingBottom: spacing.xxxl,
+    gap: spacing.xl,
   },
 
   message: {
