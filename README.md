@@ -1,16 +1,5 @@
 # PIXEL WEATHER
 
-<<<<<<< HEAD
-=======
-```text
-      \  |  /
-    `. ___ .'
-  --  ( ☀ )  --      CURRENT CONDITIONS: DELIGHTFULLY BLOCKY
-    .' ‾‾‾ `.
-      /  |  \
-```
->>>>>>> 4f23a77 (Refactored)
-
 **A full-stack weather app with live forecasts, offline-friendly caching, and the soul of a tiny handheld console.**
 
 Pixel Weather combines an Expo + React Native client with a small Express API. It finds your location, turns Open-Meteo data into a shared typed forecast, and presents everything in a crisp pixel-art interface powered by [Pixelarticons](https://pixelarticons.com/).
