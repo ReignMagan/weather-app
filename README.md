@@ -1,12 +1,5 @@
 # PIXEL WEATHER
 
-```text
-      \  |  /
-    `. ___ .'
-  --  ( ☀ )  --      CURRENT CONDITIONS: DELIGHTFULLY BLOCKY
-    .' ‾‾‾ `.
-      /  |  \
-```
 
 **A full-stack weather app with live forecasts, offline-friendly caching, and the soul of a tiny handheld console.**
 
@@ -28,7 +21,7 @@ Pixel Weather combines an Expo + React Native client with a small Express API. I
 - 🧱 Shared TypeScript contracts between client and server
 - 👾 A square-edged, cobalt-and-sunshine pixel UI—absolutely no glassmorphism detected
 
-## 🕹️ Tech cartridge
+## 🕹️ Tech-Stack
 
 | Layer     | Technology                                                     |
 | --------- | -------------------------------------------------------------- |
