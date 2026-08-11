@@ -18,7 +18,6 @@ Pixel Weather combines an Expo + React Native client with a small Express API. I
 - 💾 Weather caching for up to 24 hours, with stale-data indicators after 30 minutes
 - 🔄 Pull-to-refresh and clear retry/error states
 - 🧱 Shared TypeScript contracts between client and server
-- 👾 A square-edged, cobalt-and-sunshine pixel UI—absolutely no glassmorphism detected
 
 
 ## 🕹️ Tech Stack
